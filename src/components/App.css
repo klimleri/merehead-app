@@ -1,32 +1,78 @@
-.App {
-  text-align: center;
+body {
+    margin: 0;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.users {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2.5%;
+    box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.user {
+    font-family: "Raleway", "Microsoft JhengHei", Arial, sans-serif;
+    max-width: 500px;
+    margin: 0 auto 30px;
 }
 
-.App-link {
-  color: #61dafb;
+.user__info {
+    text-align: center;
+    padding: 10px;
+    color: #7a7b7c;
+    background-color: #e9f3e6;
+    border-radius: 5px;
+    box-shadow: 0 0 1rem #babbbc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.user__info--name {
+    font-size: 21px;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.user__info--desc {
+    width: 95%;
+    margin: 10px auto 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination__item {
+    font-size: 20px;
+    color: #607D8B;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.pagination__item:hover {
+    color: #53b3aa;
+}
+
+.pagination__item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #53b3aa;
+    transition: all 0.3s;
+}
+
+.pagination__item:hover::after,
+.pagination__item.active::after{
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.pagination__item.active {
+    color: #53b3aa;
 }

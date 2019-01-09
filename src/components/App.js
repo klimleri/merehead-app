@@ -1,28 +1,80 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
+import { connect } from "react-redux";
+import store from '../reducer/store';
+import { nextPage, initPage } from '../actions/action';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+    constructor(props) {
+        super(props);
 
-export default App;
+        this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick(event) {
+        let currentId = +event.target.dataset.id
+        store.dispatch(nextPage(currentId));
+        let pagination = [...document.querySelectorAll('.pagination__item')];
+        pagination.forEach(item => {
+            item.classList.remove('active');
+            if(item.dataset.id === currentId) {
+                item.classList.add('active');
+            }
+        });
+    }
+    componentWillMount() {
+        axios('https://cors-anywhere.herokuapp.com/http://dev.frevend.com/json/users.json')
+            .then(res => {
+                store.dispatch(initPage(res))
+            });
+    }
+
+    render() {
+        const { users, currentPage, step } = this.props.state;
+        const last = currentPage * step;
+        const first = last - step;
+        const currentUsers = users.slice(first, last);
+        const renderUsers = currentUsers.map((user) => {
+            return <div key={user.id} className="user">
+                <div className='user__info'>
+                    <h2 className='user__info--name'>{`${user.name} ${user.surname}`}</h2>
+                    <div className='user__info--desc'>{user.desc}</div>
+                </div>
+            </div>;
+        });
+
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(users.length / step); i++) {
+            pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+            return (
+                <div
+                    key={number}
+                    data-id={number}
+                    onClick={this.handleClick}
+                    className={`pagination__item ${number === 1 && "active"}`}
+                >
+                    {number}
+                </div>
+            );
+        });
+        return (
+
+            <div className="users" >
+                {renderUsers}
+                <div className='pagination'>
+                    {renderPageNumbers}
+                </div>
+            </div>
+        )
+    }
+}
+const mapStateToProps = store => {
+    return {
+        state: store
+    }
+};
+
+export default connect(mapStateToProps)(App);
