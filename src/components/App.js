@@ -12,8 +12,8 @@ class App extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(event) {
-        let currentId = +event.target.dataset.id
-        store.dispatch(nextPage(currentId));
+        let currentId = event.target.dataset.id
+        store.dispatch(nextPage(+currentId));
         let pagination = [...document.querySelectorAll('.pagination__item')];
         pagination.forEach(item => {
             item.classList.remove('active');
@@ -37,6 +37,7 @@ class App extends Component {
         const renderUsers = currentUsers.map((user) => {
             return <div key={user.id} className="user">
                 <div className='user__info'>
+                    <div className='user__info--id'>{user.id}</div>
                     <h2 className='user__info--name'>{`${user.name} ${user.surname}`}</h2>
                     <div className='user__info--desc'>{user.desc}</div>
                 </div>
@@ -54,7 +55,7 @@ class App extends Component {
                     key={number}
                     data-id={number}
                     onClick={this.handleClick}
-                    className={`pagination__item ${number === 1 && "active"}`}
+                    className={number === 1 ? 'pagination__item active' : 'pagination__item'}
                 >
                     {number}
                 </div>
